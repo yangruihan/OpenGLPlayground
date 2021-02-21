@@ -9,6 +9,8 @@ set(CMAKE_CXX_STANDARD 17)
 
 option(DEBUG "Debug Version" on)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 if(WIN32 AND MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG /MTd")
@@ -27,8 +29,19 @@ endif()
 
 set(PROJ_SOURCE_ROOT ${PROJECT_SOURCE_DIR})
 
+include_directories(${PROJECT_SOURCE_DIR}/libs/cglm/include)
+include_directories(${PROJECT_SOURCE_DIR}/libs/glad/include)
+include_directories(${PROJECT_SOURCE_DIR}/libs/glfw/include)
+include_directories(${PROJECT_SOURCE_DIR}/libs/rlib/include)
+include_directories(${PROJECT_SOURCE_DIR}/libs/rglu/include)
+include_directories(${PROJECT_SOURCE_DIR}/libs/SOIL2/src)
+include_directories(${PROJECT_SOURCE_DIR}/libs/assimp/include)
+
 add_subdirectory(libs/glad)
 add_subdirectory(libs/glfw)
 add_subdirectory(libs/rlib)
 add_subdirectory(libs/cglm)
+add_subdirectory(libs/rglu)
+add_subdirectory(libs/SOIL2)
+add_subdirectory(libs/assimp)
 add_subdirectory(projects)

@@ -9,22 +9,35 @@ set(PROJ_SOURCE_ROOT ${PROJECT_SOURCE_DIR})
 
 # ---------- OPTIONS ----------
 option(DEBUG "Debug Version" off)
-option(COMMAND_LINE "Command Line Flag" off)
-option(LOG_USE_COLOR "Log use color" on)
+option(RLIB_COMMAND_LINE "Command Line Flag" off)
+option(RLIB_LOG_USE_COLOR "Log use color" on)
+option(RLIB_ENABLE_ASSERT "Enable Assert" on)
+option(RLIB_DYNAMIC_LINK "Dynamic Link" off)
 option(RLIB_BUILD_TESTS "Build the RLib test programs" on)
 
 message(STATUS "* DEBUG FLAG: ${DEBUG}")
-message(STATUS "* COMMAND LINE FLAG: ${COMMAND_LINE}")
+message(STATUS "* COMMAND LINE FLAG: ${RLIB_COMMAND_LINE}")
+message(STATUS "* LOG USE COLOR: ${RLIB_LOG_USE_COLOR}")
+message(STATUS "* RLIB ENABLE ASSERT: ${RLIB_ENABLE_ASSERT}")
+message(STATUS "* RLIB DYNAMIC LINK: ${RLIB_DYNAMIC_LINK}")
+message(STATUS "* RLIB BUILD TESTS: ${RLIB_BUILD_TESTS}")
 
-if(COMMAND_LINE)
+# ---------- MACROS ----------
+if(RLIB_COMMAND_LINE)
     add_definitions(-DCOMMAND_LINE)
-endif(COMMAND_LINE)
+endif(RLIB_COMMAND_LINE)
 
-if(LOG_USE_COLOR)
+if(RLIB_LOG_USE_COLOR)
     add_definitions(-DLOG_USE_COLOR)
-endif(LOG_USE_COLOR)
+endif(RLIB_LOG_USE_COLOR)
 
-if(WIN32 AND MSVC)
+if(RLIB_DYNAMIC_LINK)
+    add_definitions(-DR_DYNAMIC_LINK)
+endif(RLIB_DYNAMIC_LINK)
+
+add_definitions(-DR_BUILD)
+
+if(WIN32 OR MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MT")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG /MTd")
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} /MT")
@@ -59,6 +72,8 @@ function(get_static_lib_path SUB_FOLDER LIB_NAME DEBUG_OUT RELEASE_OUT)
         message(STATUS "+ Get static lib release: ${RELEASE_OUT}")
     endif()
 endfunction()
+
+include_directories("${PROJ_SOURCE_ROOT}/include")
 
 add_subdirectory(src)
 
